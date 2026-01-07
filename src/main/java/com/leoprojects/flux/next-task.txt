@@ -1,0 +1,3 @@
+O próximo passo é implementar o service e controller para o user:
+
+Aula: https://www.youtube.com/watch?v=5w-YCcOjPD0&t=1947s
