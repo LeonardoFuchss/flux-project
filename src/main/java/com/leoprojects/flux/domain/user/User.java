@@ -30,6 +30,7 @@ public class User implements UserDetails {
         this.role = role;
     }
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.ADMIN) {

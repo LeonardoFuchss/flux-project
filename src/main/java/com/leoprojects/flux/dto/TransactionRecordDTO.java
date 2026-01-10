@@ -13,6 +13,7 @@ public record TransactionRecordDTO(
         @NotBlank(message = "Description cannot be empty.") String description,
         @NotNull(message = "Amount cannot be null.") BigDecimal amount,
         @NotNull(message = "Date cannot be null.") LocalDate date,
-        @NotBlank(message = "Category cannot be empty.") String category
+        @NotBlank(message = "Category cannot be empty.") String category,
+        @NotBlank(message = "Type cannot be empty.") String type
 ) {
 }
