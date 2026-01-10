@@ -13,4 +13,14 @@ public enum Category {
     INVESTMENTS,
     GIFT,
     OTHERS;
+
+
+    public static Category from(String value) {
+        for (Category category : values()) {
+            if (category.name().equalsIgnoreCase(value)) {
+                return category;
+            }
+        }
+        throw new IllegalArgumentException("Unknown category" + value);
+    }
 }

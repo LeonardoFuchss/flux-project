@@ -1,5 +1,7 @@
 package com.leoprojects.flux.domain.transaction;
 
+import com.leoprojects.flux.domain.user.User;
+import com.leoprojects.flux.dto.TransactionRecordDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -17,6 +19,8 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne
+    private User user;
     private String title;
     private String description;
     private BigDecimal amount;
