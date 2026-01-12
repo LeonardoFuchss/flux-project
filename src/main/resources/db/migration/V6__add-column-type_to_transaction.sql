@@ -1,2 +1,0 @@
-ALTER TABLE "transaction"
-ADD COLUMN type VARCHAR(50) NOT NULL;

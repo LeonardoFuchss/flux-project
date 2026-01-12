@@ -23,6 +23,7 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
     private String title;
     private String description;
@@ -35,6 +36,9 @@ public class Transaction {
 
     public void setUser(Authentication authentication, UserRepository userRepository) {
         String login = authentication.getName();
+        if (login == null) {
+            throw new RuntimeException("O login não existe.");
+        }
         this.user = (User) userRepository.findByLogin(login);
     }
 }
