@@ -2,6 +2,7 @@ package com.leoprojects.flux.domain.user;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.leoprojects.flux.exceptions.FluxException;
 
 public enum UserRole {
     ADMIN("admin"),
@@ -16,7 +17,7 @@ public enum UserRole {
                 return userRole;
             }
         }
-        throw new IllegalArgumentException("Role desconhecida: " + role);
+        throw new FluxException("Unknown role: " + role);
     }
 
     UserRole(String role) {

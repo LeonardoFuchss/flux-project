@@ -17,7 +17,7 @@ public class TransactionController {
 
     @PostMapping()
     public ResponseEntity<?> register(@RequestBody @Valid TransactionRequestDto dto) {
-        service.registerIncome(dto);
+        service.registerTransaction(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

@@ -5,6 +5,7 @@ import com.leoprojects.flux.domain.user.User;
 import com.leoprojects.flux.dto.TransactionRequestDto;
 import com.leoprojects.flux.dto.TransactionResponseDto;
 import com.leoprojects.flux.dto.TransactionUpdateDto;
+import com.leoprojects.flux.exceptions.FluxException;
 import com.leoprojects.flux.mapper.TransactionMapper;
 import com.leoprojects.flux.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
@@ -25,7 +26,7 @@ public class TransactionService {
     private final AuthenticatedUserService authUserService;
 
     @Transactional
-    public void registerIncome(TransactionRequestDto dto) {
+    public void registerTransaction(TransactionRequestDto dto) {
         Transaction transaction = mapper.dtoRequestToTransaction(dto);
         transaction.setUser(authUserService.getAuthenticatedUser());
         repository.save(transaction);
@@ -60,11 +61,20 @@ public class TransactionService {
 
     @Transactional
     public void updateTransaction(TransactionUpdateDto dto, Long id) {
-        Optional<Transaction> transaction = repository.findById(id);
-        transaction.ifPresent(value -> value.updateTransaction(dto));
+        Transaction transaction = getValidatedTransaction(id);
+        transaction.updateTransaction(dto);
     }
     @Transactional
     public void deleteTransaction(Long id) {
-        repository.deleteById(id);
+        Transaction transaction = getValidatedTransaction(id);
+        repository.delete(transaction);
+    }
+
+    private Transaction getValidatedTransaction(Long id) {
+        Transaction transaction = repository.findById(id).orElseThrow(() -> new FluxException("Transaction not found."));
+        if (!transaction.getUser().getId().equals(authUserService.getAuthenticatedUser().getId())) {
+            throw new FluxException("Authenticated user does not match transaction user");
+        }
+        return transaction;
     }
 }

@@ -1,6 +1,7 @@
 package com.leoprojects.flux.services;
 
 import com.leoprojects.flux.domain.user.User;
+import com.leoprojects.flux.exceptions.FluxException;
 import com.leoprojects.flux.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +22,7 @@ public class AuthenticatedUserService {
 
         User user = (User) repository.findByLogin(login);
         if (user == null) {
-            throw new RuntimeException("Authenticated user not found");
+            throw new FluxException("Authenticated user not found");
         } else {
             return user;
         }

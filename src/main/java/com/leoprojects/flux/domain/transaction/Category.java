@@ -1,5 +1,7 @@
 package com.leoprojects.flux.domain.transaction;
 
+import com.leoprojects.flux.exceptions.FluxException;
+
 public enum Category {
     FOOD,
     TRANSPORTATION,
@@ -21,6 +23,6 @@ public enum Category {
                 return category;
             }
         }
-        throw new IllegalArgumentException("Unknown category" + value);
+        throw new FluxException("Unknown category: " + value);
     }
 }

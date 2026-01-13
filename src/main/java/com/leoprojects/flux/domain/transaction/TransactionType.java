@@ -1,5 +1,7 @@
 package com.leoprojects.flux.domain.transaction;
 
+import com.leoprojects.flux.exceptions.FluxException;
+
 public enum TransactionType {
     INCOME,
     EXPENSE;
@@ -10,6 +12,6 @@ public enum TransactionType {
                 return type;
             }
         }
-        throw new IllegalArgumentException("Unknown transaction type" + value);
+        throw new FluxException("Unknown transaction type: " + value);
     }
 }
