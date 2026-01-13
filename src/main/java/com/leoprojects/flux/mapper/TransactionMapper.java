@@ -3,16 +3,16 @@ package com.leoprojects.flux.mapper;
 import com.leoprojects.flux.domain.transaction.Category;
 import com.leoprojects.flux.domain.transaction.Transaction;
 import com.leoprojects.flux.domain.transaction.TransactionType;
-import com.leoprojects.flux.dto.TransactionRecordDTO;
+import com.leoprojects.flux.dto.TransactionRequestDto;
+import com.leoprojects.flux.dto.TransactionResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TransactionMapper {
 
-    public Transaction dtoToTransaction(TransactionRecordDTO dto) {
+    public Transaction dtoRequestToTransaction(TransactionRequestDto dto) {
 
         return Transaction.builder()
-                .title(dto.title())
                 .description(dto.description())
                 .date(dto.date())
                 .category(Category.from(dto.category()))
@@ -21,10 +21,9 @@ public class TransactionMapper {
                 .build();
     }
 
-    public TransactionRecordDTO incomeToDto(Transaction entity) {
+    public TransactionRequestDto transactionToDtoRequest(Transaction entity) {
 
-        return TransactionRecordDTO.builder()
-                .title(entity.getTitle())
+        return TransactionRequestDto.builder()
                 .description(entity.getDescription())
                 .amount(entity.getAmount())
                 .date(entity.getDate())
@@ -32,5 +31,15 @@ public class TransactionMapper {
                 .type(entity.getType().name())
                 .build();
 
+    }
+    public TransactionResponseDto transactionToDtoResponse(Transaction entity) {
+
+        return TransactionResponseDto.builder()
+                .description(entity.getDescription())
+                .amount(entity.getAmount())
+                .date(entity.getDate())
+                .type(entity.getType().name())
+                .category(entity.getCategory().name())
+                .build();
     }
 }

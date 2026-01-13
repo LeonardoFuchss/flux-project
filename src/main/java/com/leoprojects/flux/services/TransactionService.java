@@ -1,26 +1,57 @@
 package com.leoprojects.flux.services;
 
 import com.leoprojects.flux.domain.transaction.Transaction;
-import com.leoprojects.flux.dto.TransactionRecordDTO;
+import com.leoprojects.flux.domain.user.User;
+import com.leoprojects.flux.dto.TransactionRequestDto;
+import com.leoprojects.flux.dto.TransactionResponseDto;
 import com.leoprojects.flux.mapper.TransactionMapper;
 import com.leoprojects.flux.repository.TransactionRepository;
-import com.leoprojects.flux.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class TransactionService {
-    private final TransactionRepository incomeRepository;
+    private final TransactionRepository repository;
     private final TransactionMapper mapper;
-    private final UserRepository userRepository;
+    private final AuthenticatedUserService authUserService;
 
-    public void registerIncome(TransactionRecordDTO dto) {
-        Transaction transaction = mapper.dtoToTransaction(dto);
-        transaction.setUser(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()), userRepository);
-        incomeRepository.save(transaction);
+    public void registerIncome(TransactionRequestDto dto) {
+        Transaction transaction = mapper.dtoRequestToTransaction(dto);
+        transaction.setUser(authUserService.getAuthenticatedUser());
+        repository.save(transaction);
+    }
+    public BigDecimal totalIncome() {
+        User user = authUserService.getAuthenticatedUser();
+        LocalDate start = YearMonth.now().atDay(1);
+        LocalDate end = start.plusMonths(1);
+        return repository.sumIncomeInPeriodForUser(user.getId(), start, end);
+    }
+    public BigDecimal totalExpense() {
+        User user = authUserService.getAuthenticatedUser();
+        LocalDate start = YearMonth.now().atDay(1);
+        LocalDate end = start.plusMonths(1);
+        return repository.sumExpenseInPeriodForUser(user.getId(), start, end);
+    }
+    public BigDecimal currentBalance() {
+        BigDecimal totalIncome = this.totalIncome();
+        BigDecimal totalExpense = this.totalExpense();
+        totalIncome = (totalIncome != null) ? totalIncome : BigDecimal.ZERO;
+        totalExpense = (totalExpense != null) ? totalExpense : BigDecimal.ZERO;
+
+        return totalIncome.subtract(totalExpense);
+    }
+    public List<TransactionResponseDto> findAllByUser() {
+        List<Transaction> transactions = repository.findAllByUser(authUserService.getAuthenticatedUser());
+
+        return transactions.stream()
+                .map(mapper::transactionToDtoResponse)
+                .toList();
     }
 }

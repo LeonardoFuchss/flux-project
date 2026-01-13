@@ -8,8 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Builder
-public record TransactionRecordDTO(
-        @NotBlank(message = "Title cannot be empty.") String title,
+public record TransactionRequestDto(
         @NotBlank(message = "Description cannot be empty.") String description,
         @NotNull(message = "Amount cannot be null.") BigDecimal amount,
         @NotNull(message = "Date cannot be null.") LocalDate date,

@@ -1,7 +1,6 @@
 package com.leoprojects.flux.domain.transaction;
 
 import com.leoprojects.flux.domain.user.User;
-import com.leoprojects.flux.dto.TransactionRecordDTO;
 import com.leoprojects.flux.repository.UserRepository;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,7 +24,6 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    private String title;
     private String description;
     private BigDecimal amount;
     private LocalDate date;
@@ -34,11 +32,4 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
-    public void setUser(Authentication authentication, UserRepository userRepository) {
-        String login = authentication.getName();
-        if (login == null) {
-            throw new RuntimeException("O login não existe.");
-        }
-        this.user = (User) userRepository.findByLogin(login);
-    }
 }
