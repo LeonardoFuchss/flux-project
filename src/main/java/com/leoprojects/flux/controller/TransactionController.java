@@ -39,4 +39,10 @@ public class TransactionController {
     public ResponseEntity<?> findAllByUser() {
         return ResponseEntity.ok(service.findAllByUser());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTransaction(@RequestBody @Valid TransactionRequestDto dto, @PathVariable Long id) {
+        service.updateTransaction(dto, id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -1,6 +1,7 @@
 package com.leoprojects.flux.domain.transaction;
 
 import com.leoprojects.flux.domain.user.User;
+import com.leoprojects.flux.dto.TransactionRequestDto;
 import com.leoprojects.flux.repository.UserRepository;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,4 +33,12 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
+
+    public void updateTransaction(TransactionRequestDto dto) {
+        this.description = dto.description();
+        this.amount = dto.amount();
+        this.date = dto.date();
+        this.category = Category.from(dto.category());
+        this.type = TransactionType.from(dto.type());
+    }
 }

@@ -1,7 +1,6 @@
 package com.leoprojects.flux.dto;
 
 import lombok.Builder;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

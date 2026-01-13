@@ -36,6 +36,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.GET, "/totalIncome").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/totalExpense").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/currentBalance").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/transaction/{id}").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
