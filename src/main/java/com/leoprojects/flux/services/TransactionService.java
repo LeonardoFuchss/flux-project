@@ -4,6 +4,7 @@ import com.leoprojects.flux.domain.transaction.Transaction;
 import com.leoprojects.flux.domain.user.User;
 import com.leoprojects.flux.dto.TransactionRequestDto;
 import com.leoprojects.flux.dto.TransactionResponseDto;
+import com.leoprojects.flux.dto.TransactionUpdateDto;
 import com.leoprojects.flux.mapper.TransactionMapper;
 import com.leoprojects.flux.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
@@ -15,7 +16,6 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -59,8 +59,12 @@ public class TransactionService {
     }
 
     @Transactional
-    public void updateTransaction(TransactionRequestDto dto, Long id) {
+    public void updateTransaction(TransactionUpdateDto dto, Long id) {
         Optional<Transaction> transaction = repository.findById(id);
         transaction.ifPresent(value -> value.updateTransaction(dto));
+    }
+    @Transactional
+    public void deleteTransaction(Long id) {
+        repository.deleteById(id);
     }
 }

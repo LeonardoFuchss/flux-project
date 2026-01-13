@@ -1,12 +1,13 @@
 package com.leoprojects.flux.domain.transaction;
 
 import com.leoprojects.flux.domain.user.User;
-import com.leoprojects.flux.dto.TransactionRequestDto;
-import com.leoprojects.flux.repository.UserRepository;
+import com.leoprojects.flux.dto.TransactionUpdateDto;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.springframework.security.core.Authentication;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -34,11 +35,21 @@ public class Transaction {
     private TransactionType type;
 
 
-    public void updateTransaction(TransactionRequestDto dto) {
-        this.description = dto.description();
-        this.amount = dto.amount();
-        this.date = dto.date();
-        this.category = Category.from(dto.category());
-        this.type = TransactionType.from(dto.type());
+    public void updateTransaction(TransactionUpdateDto dto) {
+        if (dto.description() != null) {
+            this.description = dto.description();
+        }
+        if (dto.amount() != null) {
+            this.amount = dto.amount();
+        }
+        if (dto.date() != null) {
+            this.date = dto.date();
+        }
+        if (dto.category() != null) {
+            this.category = Category.from(dto.category());
+        }
+        if (dto.type() != null) {
+            this.type = TransactionType.from(dto.type());
+        }
     }
 }
