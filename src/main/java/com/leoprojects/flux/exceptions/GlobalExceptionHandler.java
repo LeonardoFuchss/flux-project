@@ -1,5 +1,6 @@
 package com.leoprojects.flux.exceptions;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -26,5 +27,10 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handle(FluxException ex) {
         return ex.getMessage();
+    }
+    @ExceptionHandler(JWTVerificationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handle(JWTVerificationException exception) {
+        return exception.getMessage();
     }
 }

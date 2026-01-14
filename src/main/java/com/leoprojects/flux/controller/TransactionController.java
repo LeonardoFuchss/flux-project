@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/transactions")
 @AllArgsConstructor
+@CrossOrigin("*")
 public class TransactionController {
     private final TransactionService service;
 
