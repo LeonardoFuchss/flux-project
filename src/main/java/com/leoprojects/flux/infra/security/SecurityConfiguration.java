@@ -14,6 +14,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -22,24 +27,41 @@ public class SecurityConfiguration {
 
     private final SecurityFilter securityFilter;
 
-    // Filtros de segurança
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(
                         authorize -> authorize
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/auth/register").hasRole("admin")
-                                .requestMatchers(HttpMethod.POST, "/transactions").hasAnyRole("admin", "user")
-                                .requestMatchers(HttpMethod.GET, "/summary/**").hasAnyRole("admin", "user")
-                                .requestMatchers(HttpMethod.PUT, "/{id}").hasAnyRole("admin", "user")
-                                .requestMatchers(HttpMethod.DELETE, "/{id}").hasAnyRole("admin", "user")
+                                .requestMatchers(HttpMethod.POST, "/auth/signup").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/auth/register").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/transactions").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/summary/**").permitAll()
+                                .requestMatchers(HttpMethod.PATCH, "/{id}").permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/{id}").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:4200"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setExposedHeaders(List.of("Authorization"));
+
+        config.setAllowCredentials(false);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
     @Bean

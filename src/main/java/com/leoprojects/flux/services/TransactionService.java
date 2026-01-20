@@ -86,7 +86,7 @@ public class TransactionService {
     private Transaction getValidatedTransaction(Long id) {
         Transaction transaction = repository.findById(id).orElseThrow(() -> new FluxException("Transaction not found."));
         if (!transaction.getUser().getId().equals(authUserService.getAuthenticatedUser().getId())) {
-            throw new FluxException("Authenticated user does not match transaction user");
+            throw new FluxException("You are not allowed to perform this operation.");
         }
         return transaction;
     }
