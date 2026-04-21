@@ -1,7 +1,7 @@
 package com.leoprojects.flux.domain.transaction;
 
 import com.leoprojects.flux.domain.user.User;
-import com.leoprojects.flux.dto.TransactionUpdateDto;
+import com.leoprojects.flux.dto.transaction.TransactionUpdateDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -33,6 +34,7 @@ public class Transaction {
     private Category category;
     @Enumerated(EnumType.STRING)
     private TransactionType type;
+    private LocalDateTime createdAt;
 
 
     public void updateTransaction(TransactionUpdateDto dto) {

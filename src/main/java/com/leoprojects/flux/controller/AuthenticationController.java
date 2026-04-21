@@ -1,19 +1,12 @@
 package com.leoprojects.flux.controller;
 
-import com.leoprojects.flux.domain.user.User;
-import com.leoprojects.flux.domain.user.UserRole;
-import com.leoprojects.flux.dto.AuthenticationDTO;
-import com.leoprojects.flux.dto.LoginResponseDTO;
-import com.leoprojects.flux.dto.PublicRegistrationDto;
-import com.leoprojects.flux.dto.RegisterDTO;
-import com.leoprojects.flux.exceptions.FluxException;
-import com.leoprojects.flux.repository.UserRepository;
+import com.leoprojects.flux.dto.user.AuthenticationDTO;
+import com.leoprojects.flux.dto.user.PublicRegistrationDto;
+import com.leoprojects.flux.dto.user.RegisterDTO;
 import com.leoprojects.flux.services.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

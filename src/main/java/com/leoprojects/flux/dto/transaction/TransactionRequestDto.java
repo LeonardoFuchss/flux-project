@@ -1,4 +1,4 @@
-package com.leoprojects.flux.dto;
+package com.leoprojects.flux.dto.transaction;
 
 import jakarta.validation.constraints.*;
 import lombok.Builder;
@@ -8,21 +8,21 @@ import java.time.LocalDate;
 
 @Builder
 public record TransactionRequestDto(
-        @NotBlank(message = "Description cannot be empty.")
+        @NotBlank(message = "The description is mandatory.")
         @Size(min = 3, max = 255, message = "Description must be between 3 and 255 characters.")
         String description,
 
-        @NotNull(message = "Amount cannot be null.")
+        @NotNull(message = "The amount is mandatory.")
         @DecimalMin(value = "0.01", message = "The transaction amount must be greater than 0.")
         BigDecimal amount,
 
-        @NotNull(message = "Date cannot be null.")
+        @NotNull(message = "The date is mandatory.")
         LocalDate date,
 
-        @NotNull(message = "Category cannot be null.")
+        @NotNull(message = "The category is mandatory.")
         String category,
 
-        @NotNull(message = "Type cannot be null.")
+        @NotNull(message = "The type is mandatory.")
         String type
 ) {
 }

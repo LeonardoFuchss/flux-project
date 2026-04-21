@@ -1,4 +1,4 @@
-package com.leoprojects.flux.dto;
+package com.leoprojects.flux.dto.transaction;
 
 import lombok.Builder;
 

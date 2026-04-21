@@ -1,4 +1,4 @@
-package com.leoprojects.flux.dto;
+package com.leoprojects.flux.dto.transaction;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Size;

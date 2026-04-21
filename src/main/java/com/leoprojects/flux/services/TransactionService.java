@@ -2,9 +2,9 @@ package com.leoprojects.flux.services;
 
 import com.leoprojects.flux.domain.transaction.Transaction;
 import com.leoprojects.flux.domain.user.User;
-import com.leoprojects.flux.dto.TransactionRequestDto;
-import com.leoprojects.flux.dto.TransactionResponseDto;
-import com.leoprojects.flux.dto.TransactionUpdateDto;
+import com.leoprojects.flux.dto.transaction.TransactionRequestDto;
+import com.leoprojects.flux.dto.transaction.TransactionResponseDto;
+import com.leoprojects.flux.dto.transaction.TransactionUpdateDto;
 import com.leoprojects.flux.exceptions.FluxException;
 import com.leoprojects.flux.mapper.TransactionMapper;
 import com.leoprojects.flux.repository.TransactionRepository;
@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -30,41 +30,47 @@ public class TransactionService {
     @Transactional
     public void registerTransaction(TransactionRequestDto dto) {
         log.debug("Persisting new transaction...");
-        Transaction transaction = mapper.dtoRequestToTransaction(dto);
+        Transaction transaction = mapper.toEntity(dto);
         log.debug("Defining Transaction User...");
         transaction.setUser(authUserService.getAuthenticatedUser());
+        transaction.setCreatedAt(LocalDateTime.now());
         Transaction saved = repository.save(transaction);
         log.info("Transfer saved successfully! transactionId={} userId={}", saved.getId(), saved.getUser().getId());
     }
-    public BigDecimal totalIncome() {
+    public BigDecimal totalIncome(int month, int year) {
         log.debug("Seeking total user income...");
         User user = authUserService.getAuthenticatedUser();
-        LocalDate start = YearMonth.now().atDay(1);
-        LocalDate end = start.plusMonths(1);
+        YearMonth yearMonth = YearMonth.of(year, month);
+        LocalDate start = yearMonth.atDay(1);
+        LocalDate end = yearMonth.plusMonths(1).atDay(1);
         return repository.sumIncomeInPeriodForUser(user.getId(), start, end);
     }
-    public BigDecimal totalExpense() {
+    public BigDecimal totalExpense(int month, int year) {
         log.debug("Seeking total user expense...");
         User user = authUserService.getAuthenticatedUser();
-        LocalDate start = YearMonth.now().atDay(1);
-        LocalDate end = start.plusMonths(1);
+        YearMonth yearMonth = YearMonth.of(year, month);
+        LocalDate start = yearMonth.atDay(1);
+        LocalDate end = yearMonth.plusMonths(1).atDay(1);
         return repository.sumExpenseInPeriodForUser(user.getId(), start, end);
     }
-    public BigDecimal currentBalance() {
+    public BigDecimal currentBalance(int month, int year) {
         log.debug("Seeking total user Balance...");
-        BigDecimal totalIncome = this.totalIncome();
-        BigDecimal totalExpense = this.totalExpense();
+        BigDecimal totalIncome = this.totalIncome(month, year);
+        BigDecimal totalExpense = this.totalExpense(month, year);
         totalIncome = (totalIncome != null) ? totalIncome : BigDecimal.ZERO;
         totalExpense = (totalExpense != null) ? totalExpense : BigDecimal.ZERO;
 
         return totalIncome.subtract(totalExpense);
     }
-    public List<TransactionResponseDto> findAllByUser() {
+
+    public List<TransactionResponseDto> findAllByUser(int month, int year) {
         log.debug("Fetching all user transactions...");
-        List<Transaction> transactions = repository.findAllByUser(authUserService.getAuthenticatedUser());
+        User user = authUserService.getAuthenticatedUser();
+        YearMonth yearMonth = YearMonth.of(year, month);
+        List<Transaction> transactions = repository.findAllByUserAndPeriod(user.getId(), yearMonth.atDay(1), yearMonth.plusMonths(1).atDay(1));
 
         return transactions.stream()
-                .map(mapper::transactionToDtoResponse)
+                .map(mapper::toDto)
                 .toList();
     }
 

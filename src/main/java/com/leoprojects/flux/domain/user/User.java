@@ -22,7 +22,7 @@ public class User implements UserDetails {
     private Long id;
     private String login;
     private String password;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) // É um enum que será salvo como string no banco.
     private UserRole role;
 
     public User(String login, String password, UserRole role) {
@@ -31,9 +31,8 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<? extends GrantedAuthority> getAuthorities() { // Definimos o que o usuário poderá acessar.
         if (this.role == UserRole.ADMIN) {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         } else {

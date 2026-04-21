@@ -30,10 +30,10 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Permitindo requisições dos domínios pré-definidos nas configurações.
+                .csrf(AbstractHttpConfigurer::disable) // CSRF desabilitado porque a API é stateless e utiliza autenticação via JWT. Como não usamos sessão baseada em cookies, o risco de CSRF é reduzido.
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Definindo que a aplicação é stateless (servidor não guarda informações entre sessões, quem faz isso é o JWT.)
+                .authorizeHttpRequests( // Autorizando requisições.
                         authorize -> authorize
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
@@ -45,12 +45,12 @@ public class SecurityConfiguration {
                                 .requestMatchers(HttpMethod.DELETE, "/{id}").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class) // Processa este filtro antes de qualquer requisição (autenticação do usuário)
                 .build();
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() { // Permite requisições de um domínio para outro.
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("http://localhost:4200"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));

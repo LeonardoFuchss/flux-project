@@ -1,4 +1,4 @@
-package com.leoprojects.flux.dto;
+package com.leoprojects.flux.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
 

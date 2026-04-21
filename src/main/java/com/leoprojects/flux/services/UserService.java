@@ -2,9 +2,9 @@ package com.leoprojects.flux.services;
 
 import com.leoprojects.flux.domain.user.User;
 import com.leoprojects.flux.domain.user.UserRole;
-import com.leoprojects.flux.dto.AuthenticationDTO;
-import com.leoprojects.flux.dto.LoginResponseDTO;
-import com.leoprojects.flux.dto.PublicRegistrationDto;
+import com.leoprojects.flux.dto.user.AuthenticationDTO;
+import com.leoprojects.flux.dto.user.LoginResponseDTO;
+import com.leoprojects.flux.dto.user.PublicRegistrationDto;
 import com.leoprojects.flux.exceptions.FluxException;
 import com.leoprojects.flux.infra.security.TokenService;
 import com.leoprojects.flux.repository.UserRepository;

@@ -12,7 +12,7 @@ public enum UserRole {
 
     @JsonCreator
     public UserRole fromValue(String role) {
-        for (UserRole userRole : UserRole.values()) {
+        for (UserRole userRole : UserRole.values()) { // Percorre (loop) pelos valores do enum (UserRole)
             if (userRole.role.equalsIgnoreCase(role) || userRole.name().equalsIgnoreCase(role)) {
                 return userRole;
             }

@@ -1,7 +1,7 @@
 package com.leoprojects.flux.controller;
 
-import com.leoprojects.flux.dto.TransactionRequestDto;
-import com.leoprojects.flux.dto.TransactionUpdateDto;
+import com.leoprojects.flux.dto.transaction.TransactionRequestDto;
+import com.leoprojects.flux.dto.transaction.TransactionUpdateDto;
 import com.leoprojects.flux.services.TransactionService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -23,23 +23,23 @@ public class TransactionController {
     }
 
     @GetMapping("/summary/total-income")
-    public ResponseEntity<?> totalIncome() {
-        return ResponseEntity.ok(service.totalIncome());
+    public ResponseEntity<?> totalIncome(@RequestParam int month, @RequestParam int year) {
+        return ResponseEntity.ok(service.totalIncome(month, year));
     }
 
     @GetMapping("/summary/total-expense")
-    public ResponseEntity<?> totalExpense() {
-        return ResponseEntity.ok(service.totalExpense());
+    public ResponseEntity<?> totalExpense(@RequestParam int month, @RequestParam int year) {
+        return ResponseEntity.ok(service.totalExpense(month, year));
     }
 
     @GetMapping("/summary/current-balance")
-    public ResponseEntity<?> currentBalance() {
-        return ResponseEntity.ok(service.currentBalance());
+    public ResponseEntity<?> currentBalance(@RequestParam int month, @RequestParam int year) {
+        return ResponseEntity.ok(service.currentBalance(month, year));
     }
 
     @GetMapping()
-    public ResponseEntity<?> findAllByUser() {
-        return ResponseEntity.ok(service.findAllByUser());
+    public ResponseEntity<?> findAllByUser(@RequestParam int month, @RequestParam int year) {
+        return ResponseEntity.ok(service.findAllByUser(month, year));
     }
 
     @PatchMapping("/{id}")
