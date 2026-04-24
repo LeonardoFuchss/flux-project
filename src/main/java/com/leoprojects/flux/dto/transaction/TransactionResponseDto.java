@@ -6,5 +6,5 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Builder
-public record TransactionResponseDto(String type, BigDecimal amount, LocalDate date, String category, String description) {
+public record TransactionResponseDto(Long id, String type, BigDecimal amount, LocalDate date, String category, String description) {
 }

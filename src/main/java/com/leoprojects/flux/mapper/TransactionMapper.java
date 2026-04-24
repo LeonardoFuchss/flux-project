@@ -23,6 +23,7 @@ public class TransactionMapper {
     public TransactionResponseDto toDto(Transaction entity) {
 
         return TransactionResponseDto.builder()
+                .id(entity.getId())
                 .description(entity.getDescription())
                 .amount(entity.getAmount())
                 .date(entity.getDate())
