@@ -18,7 +18,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO dto) {
-        return ResponseEntity.ok(userService.userLogin(dto));
+            return ResponseEntity.ok(userService.userLogin(dto));
     }
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO dto) {

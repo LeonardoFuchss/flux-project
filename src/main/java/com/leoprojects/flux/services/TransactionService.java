@@ -77,19 +77,19 @@ public class TransactionService {
     @Transactional
     public void updateTransaction(TransactionUpdateDto dto, Long id) {
         log.debug("Updating User Data...");
-        Transaction transaction = getValidatedTransaction(id);
+        Transaction transaction = validateTransaction(id);
         transaction.updateTransaction(dto);
         log.info("User data updated successfully!");
     }
     @Transactional
     public void deleteTransaction(Long id) {
         log.debug("Deleting transaction...");
-        Transaction transaction = getValidatedTransaction(id);
+        Transaction transaction = validateTransaction(id);
         repository.delete(transaction);
         log.info("Transaction deleted successfully!");
     }
 
-    private Transaction getValidatedTransaction(Long id) {
+    private Transaction validateTransaction(Long id) {
         Transaction transaction = repository.findById(id).orElseThrow(() -> new FluxException("Transaction not found."));
         if (!transaction.getUser().getId().equals(authUserService.getAuthenticatedUser().getId())) {
             throw new FluxException("You are not allowed to perform this operation.");
